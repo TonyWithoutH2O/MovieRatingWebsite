@@ -32,7 +32,7 @@ public class IndexController {
 	
 	@RequestMapping(value = "/login.do", method = RequestMethod.GET)
 	public String login() {
-		return "index/index";
+		return "login";
 	}
 	
 	@RequestMapping(value = "/login.do", method = RequestMethod.POST)
@@ -57,9 +57,12 @@ public class IndexController {
 		return;
 	}
 	
-	@RequestMapping(value = "/main")
-	public String main() {
-		return "index/main";
+	@RequestMapping(value = "/userIndex.do")
+	public String userIndex(HttpServletRequest request, HttpServletResponse response) throws UserException {
+		/*if (request.getSession().getAttribute("currentUser") == null) {
+			throw new UserException("Please log in first!");
+		}*/
+		return "index/index";
 	}
 	
 }
