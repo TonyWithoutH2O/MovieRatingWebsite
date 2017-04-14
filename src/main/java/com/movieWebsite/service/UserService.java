@@ -13,7 +13,7 @@ public interface UserService {
 	 * Add the user into the database
 	 * @param user
 	 */
-	public void createUser(User user);
+	public boolean createUser(User user);
 	
 	/**
 	 * Delete the corresponding user in the database

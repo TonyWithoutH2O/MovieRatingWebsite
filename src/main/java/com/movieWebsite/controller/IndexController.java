@@ -58,11 +58,21 @@ public class IndexController {
 	}
 	
 	@RequestMapping(value = "/userIndex.do")
-	public String userIndex(HttpServletRequest request, HttpServletResponse response) throws UserException {
-		/*if (request.getSession().getAttribute("currentUser") == null) {
+	public void userIndex(HttpServletRequest request, HttpServletResponse response) throws UserException {
+		User currentUser = (User)request.getSession().getAttribute("currentUser");
+		if (currentUser == null) {
 			throw new UserException("Please log in first!");
-		}*/
-		return "index/index";
+		}
+		String json = new Gson().toJson(currentUser);
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		try {
+			response.getWriter().write(json);
+			//response.flushBuffer();
+		} catch (Exception e) {
+			
+		}
+		return;
 	}
 	
 }

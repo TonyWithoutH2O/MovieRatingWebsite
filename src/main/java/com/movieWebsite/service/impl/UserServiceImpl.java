@@ -17,11 +17,13 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	@Transactional
-	public void createUser(User user) {
+	public boolean createUser(User user) {
 		User retUser = findUserByName(user.getUsername());
 		if (retUser == null) {
 			baseDao.save(user);
+			return true;
 		}
+		return false;
 	}
 
 	@Override
