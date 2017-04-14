@@ -1,7 +1,6 @@
 package com.movieWebsite.controller;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.google.gson.Gson;
 import com.movieWebsite.model.User;
 import com.movieWebsite.service.UserService;
-import com.mysql.jdbc.UpdatableResultSet;
 
 @Controller
 @RequestMapping("/user")
