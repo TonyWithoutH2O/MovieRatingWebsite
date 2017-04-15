@@ -1,6 +1,7 @@
 package com.movieWebsite.controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -32,7 +33,7 @@ public class UserController {
 	@RequestMapping(value = "/add.do")
 	public void add(HttpServletRequest request, HttpServletResponse response) {
 		String json = request.getParameter("user");
-		User newUser = (new Gson()).fromJson(json, User.class);
+		User newUser = new Gson().fromJson(json, User.class);
 		userService.createUser(newUser); // Will implement the check of success
 											// or not later
 	}
@@ -45,23 +46,34 @@ public class UserController {
 			// TODO redirect to login
 		}
 		String json = request.getParameter("user");
-		User user = (User) (new Gson()).fromJson(json, User.class);
+		User user = (User) (new Gson().fromJson(json, User.class));
 		user.setUserid(currentUser.getUserid());
 		user.setUsername(currentUser.getUsername());
 		userService.updateUser(user);
 	}
 
 	@RequestMapping(value = "/{username}.do")
-	public void userIndex(@PathVariable String username, HttpServletRequest request, HttpServletResponse response) throws IOException {
+	public void userIndex(@PathVariable String username, HttpServletRequest request, HttpServletResponse response)
+			throws IOException {
 		HttpSession session = request.getSession();
-		User currentUser = (User)session.getAttribute("currentUser");
+		User currentUser = (User) session.getAttribute("currentUser");
 		if (currentUser == null || (!currentUser.getUsername().equals(username))) {
 			// TODO redirect to login
 		}
+		String json = new Gson().toJson(currentUser, User.class);
+		writeToResponse(json, response);
+	}
+
+	private void writeToResponse(String json, HttpServletResponse response) throws IOException {
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
-		response.getWriter().write((new Gson()).toJson(currentUser, User.class));
+		PrintWriter writer = response.getWriter();
+		writer.write(json);
+		writer.flush();
+		writer.close();
 	}
+
+	// For jsp
 
 	/*
 	 * @RequestMapping("/list") public ModelAndView list() { ModelAndView mav =
@@ -119,5 +131,4 @@ public class UserController {
 		}
 		return "redirect:/index/login";
 	}
-
 }

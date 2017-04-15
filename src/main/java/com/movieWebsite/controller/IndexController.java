@@ -1,6 +1,7 @@
 package com.movieWebsite.controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
@@ -21,21 +22,11 @@ import com.movieWebsite.service.UserService;
 @Controller
 @RequestMapping("/index")
 public class IndexController {
-	
+
 	@Resource
 	private UserService userService;
-	
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public String login1() {
-		return "index/login";
-	}
-	
-	@RequestMapping(value = "/login.do", method = RequestMethod.GET)
-	public String login() {
-		return "login";
-	}
-	
-	@RequestMapping(value = "/login.do", method = RequestMethod.POST)
+
+	@RequestMapping(value = "/login.do")
 	public void login(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		System.out.println(" login validation");
 		String username = request.getParameter("username");
@@ -46,33 +37,40 @@ public class IndexController {
 		}
 		Cookie cookie = new Cookie("userInfo", username + "-" + password);
 		cookie.setMaxAge(60 * 60 * 24);
-		
+
 		response.addCookie(cookie);
 		HttpSession session = request.getSession();
 		session.setAttribute("currentUser", currentUser);
-	    String json = new Gson().toJson(new ResJSON(0, "Success"));
-	    response.setContentType("application/json");
-	    response.setCharacterEncoding("UTF-8");
-	    response.getWriter().write(json);
+		String json = new Gson().toJson(new ResJSON(0, "Success"));
+		writeToResponse(json, response);
 		return;
 	}
-	
+
 	@RequestMapping(value = "/userIndex.do")
-	public void userIndex(HttpServletRequest request, HttpServletResponse response) throws UserException {
-		User currentUser = (User)request.getSession().getAttribute("currentUser");
+	public void userIndex(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		User currentUser = (User) request.getSession().getAttribute("currentUser");
 		if (currentUser == null) {
-			throw new UserException("Please log in first!");
+			//throw new UserException("Please log in first!");
+			//TODO redirect to the login page
 		}
 		String json = new Gson().toJson(currentUser);
-		response.setContentType("application/json");
-		response.setCharacterEncoding("UTF-8");
-		try {
-			response.getWriter().write(json);
-			//response.flushBuffer();
-		} catch (Exception e) {
-			
-		}
+		writeToResponse(json, response);
 		return;
 	}
 	
+	private void writeToResponse(String json, HttpServletResponse response) throws IOException {
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		PrintWriter writer = response.getWriter();
+		writer.write(json);
+		writer.flush();
+		writer.close();
+	}
+	
+	// For jsp
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	public String login1() {
+		return "index/login";
+	}
+
 }

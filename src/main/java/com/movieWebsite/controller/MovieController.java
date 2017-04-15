@@ -1,5 +1,7 @@
 package com.movieWebsite.controller;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -23,36 +25,34 @@ public class MovieController {
 	private MovieService movieService;
 	
 	@RequestMapping("/list.do")
-	public void list(HttpServletRequest request, HttpServletResponse response) {
+	public void list(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		List<Movie> movieList = movieService.movieList();
 		String json = new Gson().toJson(movieList);
-		response.setContentType("application/json");
-		response.setCharacterEncoding("UTF-8");
-		try {
-			response.getWriter().write(json);
-		} catch (Exception e) {
-			
-		}
+		writeToResponse(json, response);
 	}
 	
 	@RequestMapping("/{movieName}.do")
 	public void movieIndex(@PathVariable String movieName, 
 							HttpServletRequest request, 
-							HttpServletResponse response) {
+							HttpServletResponse response) throws IOException {
 		Movie movie = movieService.findMovieByName(movieName);
 		if (movie == null) {
 			// TODO return to where it comes
 		}
-		String json = (new Gson().toJson(movie));
+		String json = new Gson().toJson(movie);
+		writeToResponse(json, response);
+	}	
+	
+	private void writeToResponse(String json, HttpServletResponse response) throws IOException {
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
-		try {
-			response.getWriter().write(json);
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
+		PrintWriter writer = response.getWriter();
+		writer.write(json);
+		writer.flush();
+		writer.close();
 	}
 	
+	// For jsp
 	@RequestMapping("/list")
 	public String list(Model model) {
 		List<Movie> movieList = movieService.movieList();
