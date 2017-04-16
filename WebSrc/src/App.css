@@ -1,0 +1,77 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.App-header {
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: white;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.bg-black {
+	background:#2d353c!important
+}
+.login {
+	margin:168px 0
+}
+.login label {
+	color:#707478
+}
+.login .login-header {
+	position:relative;
+	top:-80px;
+	left:50%;
+	right:0;
+	width:450px;
+	padding:0 40px;
+	margin-left:-225px;
+	font-weight:300
+}
+.login .login-header .brand {
+	padding:0;
+	font-size:28px
+}
+.login .login-header .brand .logo {
+	border:14px solid transparent;
+	border-color:#626668 #565b5e #414446;
+	width:28px;
+	height:28px;
+	position:relative;
+	font-size:0;
+	margin-right:10px;
+	top:-9px
+}
+.login .login-header .brand small {
+	font-size:14px;
+	display:block
+}
+.login .login-header .icon {
+	position:absolute;
+	right:40px;
+	top:-2px;
+	opacity:.1;
+	filter:alpha(opacity=10)
+}
+.login .login-header .icon i {
+	font-size:70px
+}
+.login .login-content {
+	padding:30px 40px;
+	color:#999;
+	width:450px;
+	margin:0 auto
+}
