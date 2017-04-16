@@ -11,9 +11,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.google.gson.Gson;
 import com.movieWebsite.model.ResJSON;
 import com.movieWebsite.model.User;
 import com.movieWebsite.model.UserException;
@@ -58,11 +56,4 @@ public class IndexController {
 		return;
 	}
 	
-	// For jsp
-	/*@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public String login1() {
-		return "index/login";
-	}
-	*/
-
 }
