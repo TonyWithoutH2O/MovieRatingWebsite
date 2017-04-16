@@ -24,28 +24,29 @@ public class UserController {
 	private UserService userService;
 
 	@RequestMapping(value = "/add.do")
-	public void add(HttpServletRequest request, HttpServletResponse response) {
+	public void add(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String json = request.getParameter("user");
 		User newUser = new Gson().fromJson(json, User.class);
-		if (userService.createUser(newUser)) {
-			return;
+		if (!userService.createUser(newUser)) {
+			ResJSON.writeToResponse(ResJSON.toResJSON(1, "Create fail"), response);
 		} else {
-			// TODO create failed response
+			ResJSON.writeToResponse(ResJSON.toResJSON(0, "Create success"), response);
 		}
 	}
 
 	@RequestMapping(value = "/update.do")
-	public void update(HttpServletRequest request, HttpServletResponse response) {
+	public void update(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		HttpSession session = request.getSession();
 		User currentUser = (User) session.getAttribute("currentUser");
 		if (currentUser == null) {
-			// TODO redirect to login
+			ResJSON.writeToResponse(ResJSON.toResJSON(1, "Need to login first"), response);
 		}
 		String json = request.getParameter("user");
 		User user = (User) (new Gson().fromJson(json, User.class));
 		user.setUserid(currentUser.getUserid());
 		user.setUsername(currentUser.getUsername());
 		userService.updateUser(user);
+		ResJSON.writeToResponse(ResJSON.toResJSON(0, "Update success"), response);
 	}
 
 	@RequestMapping(value = "/{username}.do")
@@ -54,7 +55,7 @@ public class UserController {
 		HttpSession session = request.getSession();
 		User currentUser = (User) session.getAttribute("currentUser");
 		if (currentUser == null || (!currentUser.getUsername().equals(username))) {
-			// TODO redirect to login
+			ResJSON.writeToResponse(ResJSON.toResJSON(1, "Need to login first"), response);			
 		}
 		ResJSON.writeToResponse(ResJSON.toResJSON(currentUser), response);
 	}

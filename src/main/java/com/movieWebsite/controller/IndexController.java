@@ -1,7 +1,6 @@
 package com.movieWebsite.controller;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
@@ -48,10 +47,8 @@ public class IndexController {
 	public void userIndex(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		User currentUser = (User) request.getSession().getAttribute("currentUser");
 		if (currentUser == null) {
-			//throw new UserException("Please log in first!");
-			//TODO redirect to the login page
+			ResJSON.writeToResponse(ResJSON.toResJSON(1, "Need to login first"), response);
 		}
-
 		ResJSON.writeToResponse(ResJSON.toResJSON(currentUser), response);
 		return;
 	}

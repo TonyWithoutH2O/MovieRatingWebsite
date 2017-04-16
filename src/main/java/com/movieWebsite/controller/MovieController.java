@@ -1,7 +1,6 @@
 package com.movieWebsite.controller;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -35,7 +34,7 @@ public class MovieController {
 							HttpServletResponse response) throws IOException {
 		Movie movie = movieService.findMovieByName(movieName);
 		if (movie == null) {
-			// TODO return to where it comes
+			ResJSON.writeToResponse(ResJSON.toResJSON(1, "Moive does not exist"), response);
 		}
 		ResJSON.writeToResponse(ResJSON.toResJSON(movie), response);
 	}	
