@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.google.gson.Gson;
+import com.movieWebsite.model.ResJSON;
 import com.movieWebsite.model.User;
 import com.movieWebsite.service.UserService;
 
@@ -34,8 +35,11 @@ public class UserController {
 	public void add(HttpServletRequest request, HttpServletResponse response) {
 		String json = request.getParameter("user");
 		User newUser = new Gson().fromJson(json, User.class);
-		userService.createUser(newUser); // Will implement the check of success
-											// or not later
+		if (userService.createUser(newUser)) {
+			return;
+		} else {
+			// TODO create failed response
+		}
 	}
 
 	@RequestMapping(value = "/update.do")
@@ -60,17 +64,7 @@ public class UserController {
 		if (currentUser == null || (!currentUser.getUsername().equals(username))) {
 			// TODO redirect to login
 		}
-		String json = new Gson().toJson(currentUser, User.class);
-		writeToResponse(json, response);
-	}
-
-	private void writeToResponse(String json, HttpServletResponse response) throws IOException {
-		response.setContentType("application/json");
-		response.setCharacterEncoding("UTF-8");
-		PrintWriter writer = response.getWriter();
-		writer.write(json);
-		writer.flush();
-		writer.close();
+		ResJSON.writeToResponse(ResJSON.toResJSON(currentUser), response);
 	}
 
 	// For jsp
@@ -79,6 +73,7 @@ public class UserController {
 	 * @RequestMapping("/list") public ModelAndView list() { ModelAndView mav =
 	 * new ModelAndView(); mav.setViewName("user/list"); return mav; }
 	 */
+	/*
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	public String add(Model model) {
 		model.addAttribute(new User());
@@ -131,4 +126,5 @@ public class UserController {
 		}
 		return "redirect:/index/login";
 	}
+	*/
 }

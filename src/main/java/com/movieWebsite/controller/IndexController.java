@@ -41,8 +41,8 @@ public class IndexController {
 		response.addCookie(cookie);
 		HttpSession session = request.getSession();
 		session.setAttribute("currentUser", currentUser);
-		String json = new Gson().toJson(new ResJSON(0, "Success"));
-		writeToResponse(json, response);
+
+		ResJSON.writeToResponse(ResJSON.toResJSON(0, "Success"), response);
 		return;
 	}
 
@@ -53,24 +53,16 @@ public class IndexController {
 			//throw new UserException("Please log in first!");
 			//TODO redirect to the login page
 		}
-		String json = new Gson().toJson(currentUser);
-		writeToResponse(json, response);
+
+		ResJSON.writeToResponse(ResJSON.toResJSON(currentUser), response);
 		return;
 	}
 	
-	private void writeToResponse(String json, HttpServletResponse response) throws IOException {
-		response.setContentType("application/json");
-		response.setCharacterEncoding("UTF-8");
-		PrintWriter writer = response.getWriter();
-		writer.write(json);
-		writer.flush();
-		writer.close();
-	}
-	
 	// For jsp
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	/*@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String login1() {
 		return "index/login";
 	}
+	*/
 
 }

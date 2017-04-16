@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.google.gson.Gson;
 import com.movieWebsite.model.Movie;
+import com.movieWebsite.model.ResJSON;
 import com.movieWebsite.service.MovieService;
 
 @Controller
@@ -27,8 +28,7 @@ public class MovieController {
 	@RequestMapping("/list.do")
 	public void list(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		List<Movie> movieList = movieService.movieList();
-		String json = new Gson().toJson(movieList);
-		writeToResponse(json, response);
+		ResJSON.writeToResponse(ResJSON.toResJSON(movieList), response);
 	}
 	
 	@RequestMapping("/{movieName}.do")
@@ -39,20 +39,11 @@ public class MovieController {
 		if (movie == null) {
 			// TODO return to where it comes
 		}
-		String json = new Gson().toJson(movie);
-		writeToResponse(json, response);
+		ResJSON.writeToResponse(ResJSON.toResJSON(movie), response);
 	}	
 	
-	private void writeToResponse(String json, HttpServletResponse response) throws IOException {
-		response.setContentType("application/json");
-		response.setCharacterEncoding("UTF-8");
-		PrintWriter writer = response.getWriter();
-		writer.write(json);
-		writer.flush();
-		writer.close();
-	}
-	
-	// For jsp
+	// For js
+	/*
 	@RequestMapping("/list")
 	public String list(Model model) {
 		List<Movie> movieList = movieService.movieList();
@@ -66,4 +57,5 @@ public class MovieController {
 		model.addAttribute("movie", movie);
 		return "movie/movieIndex";
 	}
+	*/
 }
